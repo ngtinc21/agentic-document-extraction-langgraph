@@ -72,6 +72,12 @@ class RunOptions(BaseModel):
     provider: str = "fake"
     require_evidence: bool = True
     review_confidence_threshold: Confidence = "medium"
+    max_validation_retries: int = Field(
+        default=1,
+        ge=0,
+        le=3,
+        description="Number of times to retry extraction after validation flags a result.",
+    )
 
 
 class ExtractionJob(BaseModel):

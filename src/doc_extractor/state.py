@@ -16,6 +16,7 @@ class WorkflowState(TypedDict, total=False):
     documents: list[dict[str, Any]]
     evidence: list[dict[str, Any]]
     results: list[dict[str, Any]]
+    extraction_attempts: int
     validation_summary: dict[str, Any]
     review_queue: list[dict[str, Any]]
     aggregate: dict[str, Any]

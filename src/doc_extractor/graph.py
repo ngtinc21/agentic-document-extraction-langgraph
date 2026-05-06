@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-from collections.abc import Callable
 from pathlib import Path
 from typing import Any
 
@@ -16,18 +15,21 @@ from .nodes import (
     load_sources_node,
     validate_results_node,
 )
+from .schemas import ExtractionJob, ValidationSummary
 from .state import WorkflowState
 
-NODE_SEQUENCE: list[Callable[[WorkflowState], WorkflowState]] = [
-    load_job_node,
-    load_sources_node,
-    evidence_scout_node,
-    extract_values_node,
-    validate_results_node,
-    human_review_gate_node,
-    aggregate_results_node,
-    evaluate_against_ground_truth_node,
-]
+
+def route_after_validation(state: WorkflowState) -> str:
+    """Route invalid or uncertain results back to extraction until retry budget is used."""
+
+    job = ExtractionJob.model_validate(state["job"])
+    summary = ValidationSummary.model_validate(state["validation_summary"])
+    attempts = int(state.get("extraction_attempts", 0))
+    max_attempts = 1 + job.run_options.max_validation_retries
+
+    if attempts < max_attempts and (summary.review_count > 0 or summary.validation_failures):
+        return "retry_extraction"
+    return "human_review"
 
 
 def build_graph() -> Any:
@@ -53,7 +55,14 @@ def build_graph() -> Any:
     graph.add_edge("load_sources", "evidence_scout")
     graph.add_edge("evidence_scout", "extract_values")
     graph.add_edge("extract_values", "validate_results")
-    graph.add_edge("validate_results", "human_review_gate")
+    graph.add_conditional_edges(
+        "validate_results",
+        route_after_validation,
+        {
+            "retry_extraction": "extract_values",
+            "human_review": "human_review_gate",
+        },
+    )
     graph.add_edge("human_review_gate", "aggregate_results")
     graph.add_edge("aggregate_results", "evaluate_against_ground_truth")
     graph.add_edge("evaluate_against_ground_truth", END)
@@ -68,7 +77,23 @@ def run_workflow(job_path: str | Path) -> dict[str, Any]:
     if compiled_graph is not None:
         final_state = compiled_graph.invoke(initial_state)
     else:
-        final_state = initial_state
-        for node in NODE_SEQUENCE:
-            final_state = node(final_state)
+        final_state = _run_sequential_fallback(initial_state)
     return final_state["aggregate"]
+
+
+def _run_sequential_fallback(initial_state: WorkflowState) -> WorkflowState:
+    """Run the same retry-aware workflow when LangGraph is not installed."""
+
+    state = load_job_node(initial_state)
+    state = load_sources_node(state)
+    state = evidence_scout_node(state)
+
+    while True:
+        state = extract_values_node(state)
+        state = validate_results_node(state)
+        if route_after_validation(state) != "retry_extraction":
+            break
+
+    state = human_review_gate_node(state)
+    state = aggregate_results_node(state)
+    return evaluate_against_ground_truth_node(state)

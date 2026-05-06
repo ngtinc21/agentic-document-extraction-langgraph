@@ -36,6 +36,7 @@
   "run_options": {
     "provider": "fake",
     "require_evidence": true,
-    "review_confidence_threshold": "medium"
+    "review_confidence_threshold": "medium",
+    "max_validation_retries": 1
   }
 }

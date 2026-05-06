@@ -25,7 +25,10 @@ class BaseLLMProvider(ABC):
 
     @abstractmethod
     def extract_value(
-        self, entry: DictionaryEntry, evidence: Sequence[EvidenceRecord]
+        self,
+        entry: DictionaryEntry,
+        evidence: Sequence[EvidenceRecord],
+        previous_result: ExtractionResult | None = None,
     ) -> ExtractionResult:
         """Extract a structured value from evidence for one dictionary entry."""
 
@@ -60,8 +63,12 @@ class FakeLLMProvider(BaseLLMProvider):
         return evidence
 
     def extract_value(
-        self, entry: DictionaryEntry, evidence: Sequence[EvidenceRecord]
+        self,
+        entry: DictionaryEntry,
+        evidence: Sequence[EvidenceRecord],
+        previous_result: ExtractionResult | None = None,
     ) -> ExtractionResult:
+        _ = previous_result
         if not evidence:
             return ExtractionResult(
                 id=entry.id,
@@ -149,9 +156,12 @@ class GeminiProvider(BaseLLMProvider):
         return FakeLLMProvider().scout_evidence(entry, documents)
 
     def extract_value(
-        self, entry: DictionaryEntry, evidence: Sequence[EvidenceRecord]
+        self,
+        entry: DictionaryEntry,
+        evidence: Sequence[EvidenceRecord],
+        previous_result: ExtractionResult | None = None,
     ) -> ExtractionResult:
-        return FakeLLMProvider().extract_value(entry, evidence)
+        return FakeLLMProvider().extract_value(entry, evidence, previous_result)
 
 
 def build_provider(name: str) -> BaseLLMProvider:

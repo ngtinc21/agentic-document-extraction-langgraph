@@ -26,11 +26,17 @@ flowchart TD
   load_sources --> evidence_scout[evidence_scout]
   evidence_scout --> extract_values[extract_values]
   extract_values --> validate_results[validate_results]
-  validate_results --> human_review_gate[human_review_gate]
+  validate_results --> check{validation passed or retry budget used?}
+  check -- "retry extraction" --> extract_values
+  check -- "continue" --> human_review_gate[human_review_gate]
   human_review_gate --> aggregate_results[aggregate_results]
   aggregate_results --> evaluate[evaluate_against_ground_truth]
   evaluate --> end_node([End])
 ```
+
+The validation step can route failed or uncertain fields back to extraction.
+After the configured retry budget is used, unresolved fields move to the human
+review queue instead of being silently accepted.
 
 ## Project Structure
 
@@ -45,8 +51,8 @@ tests/                  Unit and end-to-end tests
 ## Quick Start
 
 ```powershell
-python -m venv .venv
-.\.venv\Scripts\Activate.ps1
+python -m venv .venv-agentic-doc
+.\.venv-agentic-doc\Scripts\Activate.ps1
 pip install -e ".[dev]"
 python examples/run_esg_demo.py
 ```
@@ -87,10 +93,19 @@ hardcoded in this repository.
 
 - dictionary-driven extraction
 - source-level evidence traceability
-- type, unit, evidence, and confidence validation
+- type, unit, evidence, and confidence validation with retry routing
 - human review queue for missing or uncertain fields
 - field-level evaluation against synthetic ground truth
 - pluggable provider interface for future LLM backends
+
+## Prompt Design
+
+This public repo intentionally avoids proprietary prompts. For interview use,
+include concise, generic prompt templates or prompt contracts only when they
+help explain the agent responsibilities. Good public prompts should describe the
+input contract, evidence requirements, output schema, validation feedback, and
+retry behavior without copying private wording, examples, model settings, or
+domain-specific methodology.
 
 ## Portfolio Positioning
 
@@ -99,8 +114,8 @@ Suggested wording:
 > Built a clean-room, dictionary-driven agentic document extraction framework
 > using LangGraph and Pydantic. The framework extracts structured fields from
 > documents using configurable field definitions, evidence rules, validation
-> gates, human review routing, and evaluation metrics. Demonstrated with a
-> synthetic ESG disclosure domain pack.
+> gates, retry routing, human review queues, and evaluation metrics.
+> Demonstrated with a synthetic ESG disclosure domain pack.
 
 ## Confidentiality
 

@@ -44,14 +44,29 @@ def evidence_scout_node(state: WorkflowState) -> WorkflowState:
 def extract_values_node(state: WorkflowState) -> WorkflowState:
     job = ExtractionJob.model_validate(state["job"])
     evidence = [EvidenceRecord.model_validate(item) for item in state.get("evidence", [])]
+    prior_result_items = map(ExtractionResult.model_validate, state.get("results", []))
+    previous_results = {
+        result.id: result
+        for result in prior_result_items
+    }
     provider = build_provider(job.run_options.provider)
 
     results: list[ExtractionResult] = []
     for entry in job.dictionary:
         entry_evidence = [item for item in evidence if item.dictionary_entry_id == entry.id]
-        results.append(provider.extract_value(entry, entry_evidence))
+        results.append(
+            provider.extract_value(
+                entry,
+                entry_evidence,
+                previous_result=previous_results.get(entry.id),
+            )
+        )
 
-    return {**state, "results": [item.model_dump() for item in results]}
+    return {
+        **state,
+        "results": [item.model_dump() for item in results],
+        "extraction_attempts": int(state.get("extraction_attempts", 0)) + 1,
+    }
 
 
 def validate_results_node(state: WorkflowState) -> WorkflowState:
