@@ -5,25 +5,25 @@ extraction engine and small domain packs.
 
 ```mermaid
 flowchart LR
-  job["ExtractionJob"]
-  sources["Source documents"]
-  dict["Dictionary entries"]
-  graph["LangGraph workflow"]
-  evidence["Evidence records"]
-  results["Extraction results"]
-  validation{"Validation passed?"}
-  review["Human review queue"]
-  eval["Evaluation summary"]
+  job["ExtractionJob"];
+  source_docs["Source documents"];
+  dictionary_entries["Dictionary entries"];
+  workflow_node["LangGraph workflow"];
+  evidence_records["Evidence records"];
+  extraction_results["Extraction results"];
+  validation_check{"Validation passed?"};
+  review_queue["Human review queue"];
+  evaluation_summary["Evaluation summary"];
 
-  job --> graph
-  sources --> graph
-  dict --> graph
-  graph --> evidence
-  evidence --> results
-  results --> validation
-  validation -- "retry" --> graph
-  validation -- "continue" --> review
-  review --> eval
+  job --> workflow_node;
+  source_docs --> workflow_node;
+  dictionary_entries --> workflow_node;
+  workflow_node --> evidence_records;
+  evidence_records --> extraction_results;
+  extraction_results --> validation_check;
+  validation_check -- "retry" --> workflow_node;
+  validation_check -- "continue" --> review_queue;
+  review_queue --> evaluation_summary;
 ```
 
 ## Workflow
@@ -48,6 +48,38 @@ after the budget is used.
 
 The same workflow can support other domains by swapping the dictionary, source
 documents, validation hints, and optional provider configuration.
+
+## Agent Roles
+
+The public project uses clean-room agent role contracts. These are generic role
+definitions, not copied internal prompts or proprietary implementation details.
+
+```mermaid
+flowchart TD
+  orchestrator["deterministic_orchestrator"];
+  url_extraction["url_extraction LLM"];
+  url_ranking["url_ranking tool"];
+  url_verification["url_verification LLM"];
+  inside_out["inside_out_extraction LLM"];
+  outside_in["outside_in_extraction LLM"];
+  validation["validation and retry routing"];
+
+  orchestrator --> url_extraction;
+  url_extraction --> url_ranking;
+  url_ranking --> url_verification;
+  url_verification --> inside_out;
+  url_verification --> outside_in;
+  inside_out --> validation;
+  outside_in --> validation;
+  validation -- "retry" --> inside_out;
+  validation -- "retry" --> outside_in;
+  validation -- "continue" --> orchestrator;
+```
+
+The current runnable MVP starts from local synthetic markdown documents, so URL
+discovery is represented as an extension contract rather than live web fetching.
+This keeps the demo deterministic, safe for CI, and free of private source
+selection rules.
 
 ## Provider Boundary
 

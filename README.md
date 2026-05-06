@@ -48,6 +48,8 @@ docs/                   Architecture and confidentiality notes
 tests/                  Unit and end-to-end tests
 ```
 
+See `docs/agents.md` for the clean-room agent role map.
+
 ## Quick Start
 
 ```powershell
@@ -97,6 +99,8 @@ hardcoded in this repository.
 - human review queue for missing or uncertain fields
 - field-level evaluation against synthetic ground truth
 - pluggable provider interface for future LLM backends
+- clean agent role contracts for URL discovery, inside-out extraction,
+  outside-in extraction, validation, and orchestration
 
 ## Prompt Design
 
