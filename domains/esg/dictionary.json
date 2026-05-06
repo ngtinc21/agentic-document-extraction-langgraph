@@ -1,0 +1,108 @@
+{
+  "dictionary": [
+    {
+      "id": "scope_1_emissions",
+      "label": "Scope 1 greenhouse gas emissions",
+      "definition": "Direct greenhouse gas emissions from owned or controlled sources.",
+      "expected_type": "number",
+      "expected_unit": "tCO2e",
+      "evidence_rules": { "keywords": ["Scope 1 greenhouse gas emissions"] },
+      "validation_rules": { "min_value": 0, "allowed_units": ["tCO2e"] }
+    },
+    {
+      "id": "scope_2_location_emissions",
+      "label": "Scope 2 location-based emissions",
+      "definition": "Indirect location-based emissions from purchased electricity.",
+      "expected_type": "number",
+      "expected_unit": "tCO2e",
+      "evidence_rules": { "keywords": ["Scope 2 location-based emissions"] },
+      "validation_rules": { "min_value": 0, "allowed_units": ["tCO2e"] }
+    },
+    {
+      "id": "renewable_energy_percentage",
+      "label": "Renewable electricity percentage",
+      "definition": "Percentage of purchased electricity sourced from renewables.",
+      "expected_type": "percentage",
+      "expected_unit": "%",
+      "evidence_rules": { "keywords": ["Renewable electricity"] },
+      "validation_rules": { "min_value": 0, "max_value": 100, "allowed_units": ["%"] }
+    },
+    {
+      "id": "water_withdrawal",
+      "label": "Total water withdrawal",
+      "definition": "Total volume of water withdrawn during the reporting year.",
+      "expected_type": "number",
+      "expected_unit": "cubic meters",
+      "evidence_rules": { "keywords": ["Total water withdrawal"] },
+      "validation_rules": { "min_value": 0, "allowed_units": ["cubic meters"] }
+    },
+    {
+      "id": "waste_recycled_percentage",
+      "label": "Waste recycled percentage",
+      "definition": "Percentage of total waste diverted to recycling or reuse.",
+      "expected_type": "percentage",
+      "expected_unit": "%",
+      "evidence_rules": { "keywords": ["Waste recycled"] },
+      "validation_rules": { "min_value": 0, "max_value": 100, "allowed_units": ["%"] }
+    },
+    {
+      "id": "women_board_percentage",
+      "label": "Women on the board",
+      "definition": "Percentage of board seats held by women.",
+      "expected_type": "percentage",
+      "expected_unit": "%",
+      "evidence_rules": { "keywords": ["Women held"] },
+      "validation_rules": { "min_value": 0, "max_value": 100, "allowed_units": ["%"] }
+    },
+    {
+      "id": "employee_turnover_rate",
+      "label": "Employee turnover rate",
+      "definition": "Employee turnover rate for the reporting year.",
+      "expected_type": "percentage",
+      "expected_unit": "%",
+      "evidence_rules": { "keywords": ["Employee turnover rate"] },
+      "validation_rules": { "min_value": 0, "max_value": 100, "allowed_units": ["%"] }
+    },
+    {
+      "id": "lost_time_injury_rate",
+      "label": "Lost-time injury rate",
+      "definition": "Lost-time injury rate per million hours worked.",
+      "expected_type": "number",
+      "expected_unit": "per million hours",
+      "evidence_rules": { "keywords": ["Lost-time injury rate"] },
+      "validation_rules": { "min_value": 0, "allowed_units": ["per million hours"] }
+    },
+    {
+      "id": "supplier_code_coverage",
+      "label": "Supplier code of conduct coverage",
+      "definition": "Percentage of active suppliers covered by the supplier code of conduct.",
+      "expected_type": "percentage",
+      "expected_unit": "%",
+      "evidence_rules": { "keywords": ["Supplier code of conduct covered"] },
+      "validation_rules": { "min_value": 0, "max_value": 100, "allowed_units": ["%"] }
+    },
+    {
+      "id": "anti_corruption_training_percentage",
+      "label": "Anti-corruption training coverage",
+      "definition": "Percentage of employees completing anti-corruption training.",
+      "expected_type": "percentage",
+      "expected_unit": "%",
+      "evidence_rules": { "keywords": ["Anti-corruption training"] },
+      "validation_rules": { "min_value": 0, "max_value": 100, "allowed_units": ["%"] }
+    },
+    {
+      "id": "environmental_fines_none",
+      "label": "No significant environmental fines",
+      "definition": "Whether no significant environmental fines were recorded in the reporting year.",
+      "expected_type": "boolean",
+      "evidence_rules": { "keywords": ["No significant environmental fines"] }
+    },
+    {
+      "id": "sustainability_committee",
+      "label": "Board sustainability committee",
+      "definition": "Whether the board has a sustainability committee or equivalent governance body.",
+      "expected_type": "boolean",
+      "evidence_rules": { "keywords": ["board sustainability committee"] }
+    }
+  ]
+}

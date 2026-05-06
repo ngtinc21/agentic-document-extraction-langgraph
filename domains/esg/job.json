@@ -1,0 +1,41 @@
+{
+  "job_id": "esg-demo-example-solar-2024",
+  "domain": "esg",
+  "entity": {
+    "name": "Example Solar Ltd",
+    "fiscal_year": 2024,
+    "attributes": {
+      "sector": "Renewable energy equipment"
+    }
+  },
+  "source_documents": [
+    {
+      "source_id": "example_solar_sustainability_2024",
+      "title": "Example Solar Ltd 2024 Sustainability Report",
+      "path": "reports/example_solar_2024.md",
+      "source_type": "synthetic_markdown",
+      "fiscal_year": 2024
+    },
+    {
+      "source_id": "example_solar_governance_2024",
+      "title": "Example Solar Ltd 2024 Governance Statement",
+      "path": "reports/example_solar_governance_2024.md",
+      "source_type": "synthetic_markdown",
+      "fiscal_year": 2024
+    },
+    {
+      "source_id": "example_solar_workforce_2024",
+      "title": "Example Solar Ltd 2024 Workforce and Safety Note",
+      "path": "reports/example_solar_workforce_2024.md",
+      "source_type": "synthetic_markdown",
+      "fiscal_year": 2024
+    }
+  ],
+  "dictionary_path": "dictionary.json",
+  "ground_truth_path": "ground_truth/example_solar_2024.json",
+  "run_options": {
+    "provider": "fake",
+    "require_evidence": true,
+    "review_confidence_threshold": "medium"
+  }
+}

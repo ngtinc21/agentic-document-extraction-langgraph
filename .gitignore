@@ -1,0 +1,54 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Secrets and local credentials
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.crt
+*credentials*.json
+*service-account*.json
+*service_account*.json
+*token*.json
+
+# Local outputs and generated artifacts
+outputs/
+output/
+runs/
+artifacts/
+logs/
+tmp/
+temp/
+checkpoints/
+*.sqlite
+*.db
+*.jsonl
+*.xlsx
+*.xlsm
+
+# Notebooks and large source documents
+.ipynb_checkpoints/
+*.nbconvert.ipynb
+*.pdf
+*.docx
+
+# OS/editor files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+.venv-agentic-doc/

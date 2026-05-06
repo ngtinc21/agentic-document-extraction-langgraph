@@ -1,0 +1,39 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "agentic-document-extraction-langgraph"
+version = "0.1.0"
+description = "Dictionary-driven agentic document extraction with LangGraph, demonstrated on ESG disclosures."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [{ name = "Portfolio Project" }]
+dependencies = [
+  "langgraph>=0.2,<1",
+  "pydantic>=2,<3",
+  "typing-extensions>=4.8",
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=8",
+  "ruff>=0.6",
+]
+gemini = [
+  "google-genai>=1.0",
+]
+
+[project.scripts]
+doc-extractor = "doc_extractor.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]

@@ -1,0 +1,16 @@
+{
+  "expected_results": [
+    { "id": "scope_1_emissions", "value": "12500", "unit": "tCO2e" },
+    { "id": "scope_2_location_emissions", "value": "31200", "unit": "tCO2e" },
+    { "id": "renewable_energy_percentage", "value": "68", "unit": "%" },
+    { "id": "water_withdrawal", "value": "180000", "unit": "cubic meters" },
+    { "id": "waste_recycled_percentage", "value": "74", "unit": "%" },
+    { "id": "women_board_percentage", "value": "42", "unit": "%" },
+    { "id": "employee_turnover_rate", "value": "8.5", "unit": "%" },
+    { "id": "lost_time_injury_rate", "value": "0.42", "unit": "per million hours" },
+    { "id": "supplier_code_coverage", "value": "91", "unit": "%" },
+    { "id": "anti_corruption_training_percentage", "value": "96", "unit": "%" },
+    { "id": "environmental_fines_none", "value": true, "unit": null },
+    { "id": "sustainability_committee", "value": true, "unit": null }
+  ]
+}
