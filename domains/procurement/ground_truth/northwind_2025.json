@@ -1,0 +1,34 @@
+{
+  "expected_results": [
+    {
+      "id": "supplier_name",
+      "value": "Northwind Components LLC",
+      "unit": null
+    },
+    {
+      "id": "contract_value",
+      "value": "1250000",
+      "unit": "USD"
+    },
+    {
+      "id": "insurance_coverage_amount",
+      "value": "5000000",
+      "unit": "USD"
+    },
+    {
+      "id": "data_processing_agreement",
+      "value": true,
+      "unit": null
+    },
+    {
+      "id": "security_certification",
+      "value": "ISO 27001",
+      "unit": null
+    },
+    {
+      "id": "delivery_sla_days",
+      "value": "5",
+      "unit": "days"
+    }
+  ]
+}

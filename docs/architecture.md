@@ -31,14 +31,18 @@ flowchart LR
 The MVP graph runs these nodes:
 
 1. `load_job`
-2. `load_sources`
-3. `evidence_scout`
-4. `extract_values`
-5. `validate_results`
-6. conditional retry to `extract_values` when validation flags a result
-7. `human_review_gate`
-8. `aggregate_results`
-9. `evaluate_against_ground_truth`
+2. `discover_source_urls`
+3. `rank_source_urls`
+4. `verify_source_urls`
+5. `load_sources`
+6. `evidence_scout`
+7. `extract_values`
+8. `validate_results`
+9. conditional retry to `extract_values` when validation flags a result
+10. `human_review_gate`
+11. `apply_human_review`
+12. `aggregate_results`
+13. `evaluate_against_ground_truth`
 
 The graph is intentionally cyclic. Validation failures and low-confidence
 results can be routed back to extraction with the previous result and validation
@@ -48,6 +52,17 @@ after the budget is used.
 
 The same workflow can support other domains by swapping the dictionary, source
 documents, validation hints, and optional provider configuration.
+
+## Checkpointing And Review
+
+Jobs can enable lightweight SQLite checkpoints through
+`run_options.enable_checkpoints`. Each completed node can write a JSON state
+snapshot for inspection or resume-style demo flows.
+
+When validation sends records to human review, the workflow can export a JSON
+review queue. A reviewer can edit the `reviewed_results` section and pass it
+back through `run_options.review_input_path` to override unresolved results in a
+traceable way.
 
 ## Agent Roles
 
@@ -76,10 +91,10 @@ flowchart TD
   validation -- "continue" --> orchestrator;
 ```
 
-The current runnable MVP starts from local synthetic markdown documents, so URL
-discovery is represented as an extension contract rather than live web fetching.
-This keeps the demo deterministic, safe for CI, and free of private source
-selection rules.
+The current runnable MVP starts from local synthetic markdown documents. The
+procurement demo adds synthetic source references so URL discovery, ranking, and
+verification can run deterministically without live web fetching. This keeps CI
+stable and avoids private source selection rules.
 
 ## Provider Boundary
 

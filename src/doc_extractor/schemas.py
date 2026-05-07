@@ -9,6 +9,7 @@ from pydantic import BaseModel, Field, field_validator
 ExpectedType = Literal["number", "percentage", "boolean", "string"]
 Confidence = Literal["high", "medium", "low"]
 ExtractionStatus = Literal["extracted", "missing", "needs_review", "invalid"]
+SourceStatus = Literal["candidate", "ranked", "verified", "rejected"]
 
 
 class EntityMetadata(BaseModel):
@@ -66,12 +67,34 @@ class SourceDocument(BaseModel):
     content: str | None = None
 
 
+class SourceReference(BaseModel):
+    """Public source metadata used by URL discovery, ranking, and verification."""
+
+    source_id: str
+    title: str
+    url: str
+    source_type: str = "web_page"
+    fiscal_year: int | None = None
+    publisher: str | None = None
+    is_entity_authored: bool = False
+    status: SourceStatus = "candidate"
+    ranking_score: float = 0.0
+    confidence: Confidence = "medium"
+    rationale: str = ""
+
+
 class RunOptions(BaseModel):
     """Execution options for a job."""
 
     provider: str = "fake"
     require_evidence: bool = True
     review_confidence_threshold: Confidence = "medium"
+    enable_source_discovery: bool = False
+    enable_checkpoints: bool = False
+    checkpoint_path: str | None = None
+    resume_from_checkpoint: bool = False
+    review_output_path: str | None = "outputs/review_queue.json"
+    review_input_path: str | None = None
     max_validation_retries: int = Field(
         default=1,
         ge=0,
@@ -87,6 +110,7 @@ class ExtractionJob(BaseModel):
     domain: str
     entity: EntityMetadata
     source_documents: list[SourceDocument]
+    source_references: list[SourceReference] = Field(default_factory=list)
     dictionary: list[DictionaryEntry] = Field(default_factory=list)
     dictionary_path: str | None = None
     ground_truth_path: str | None = None

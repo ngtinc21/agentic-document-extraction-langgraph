@@ -1,0 +1,83 @@
+{
+  "job_id": "procurement-demo-northwind-2025",
+  "domain": "procurement",
+  "entity": {
+    "name": "Northwind Components LLC",
+    "fiscal_year": 2025,
+    "attributes": {
+      "category": "supplier onboarding"
+    }
+  },
+  "source_documents": [
+    {
+      "source_id": "northwind_onboarding_2025",
+      "title": "Northwind Components LLC 2025 Supplier Onboarding Packet",
+      "path": "reports/northwind_onboarding_2025.md",
+      "source_type": "synthetic_markdown",
+      "fiscal_year": 2025
+    },
+    {
+      "source_id": "northwind_insurance_2025",
+      "title": "Northwind Components LLC 2025 Insurance Certificate",
+      "path": "reports/northwind_insurance_2025.md",
+      "source_type": "synthetic_markdown",
+      "fiscal_year": 2025
+    },
+    {
+      "source_id": "northwind_security_2025",
+      "title": "Northwind Components LLC 2025 Security Summary",
+      "path": "reports/northwind_security_2025.md",
+      "source_type": "synthetic_markdown",
+      "fiscal_year": 2025
+    }
+  ],
+  "source_references": [
+    {
+      "source_id": "northwind_onboarding_2025",
+      "title": "Northwind Components LLC 2025 Supplier Onboarding Packet",
+      "url": "local://northwind_onboarding_2025",
+      "source_type": "synthetic_markdown",
+      "fiscal_year": 2025,
+      "publisher": "Northwind Components LLC",
+      "is_entity_authored": true
+    },
+    {
+      "source_id": "northwind_insurance_2025",
+      "title": "Northwind Components LLC 2025 Insurance Certificate",
+      "url": "local://northwind_insurance_2025",
+      "source_type": "synthetic_markdown",
+      "fiscal_year": 2025,
+      "publisher": "Northwind Components LLC",
+      "is_entity_authored": true
+    },
+    {
+      "source_id": "northwind_security_2025",
+      "title": "Northwind Components LLC 2025 Security Summary",
+      "url": "local://northwind_security_2025",
+      "source_type": "synthetic_markdown",
+      "fiscal_year": 2025,
+      "publisher": "Northwind Components LLC",
+      "is_entity_authored": true
+    },
+    {
+      "source_id": "unrelated_supplier_news_2025",
+      "title": "Regional supplier market news 2025",
+      "url": "local://unrelated_supplier_news_2025",
+      "source_type": "synthetic_markdown",
+      "fiscal_year": 2025,
+      "publisher": "Example News Wire",
+      "is_entity_authored": false
+    }
+  ],
+  "dictionary_path": "dictionary.json",
+  "ground_truth_path": "ground_truth/northwind_2025.json",
+  "run_options": {
+    "provider": "fake",
+    "require_evidence": true,
+    "review_confidence_threshold": "medium",
+    "enable_source_discovery": true,
+    "enable_checkpoints": true,
+    "checkpoint_path": "outputs/checkpoints/procurement_demo.sqlite",
+    "max_validation_retries": 1
+  }
+}

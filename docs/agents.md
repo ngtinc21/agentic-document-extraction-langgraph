@@ -38,7 +38,7 @@ It should not include:
 
 ## MVP Scope
 
-The runnable demo starts from synthetic local markdown reports. URL extraction,
-ranking, and verification are represented as role contracts so the architecture
-is clear without adding non-deterministic live web fetching to CI. A later
-version can add public web fetching behind the same contracts.
+The runnable demos start from synthetic local markdown reports. The procurement
+demo includes synthetic source references so URL extraction, ranking, and
+verification can run deterministically in CI. A later version can add public web
+fetching behind the same contracts.

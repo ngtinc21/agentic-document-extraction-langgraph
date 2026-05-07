@@ -43,6 +43,7 @@ review queue instead of being silently accepted.
 ```text
 src/doc_extractor/      Generic extraction engine
 domains/esg/            Synthetic ESG domain pack
+domains/procurement/    Synthetic procurement domain pack
 examples/               Runnable demos
 docs/                   Architecture and confidentiality notes
 tests/                  Unit and end-to-end tests
@@ -57,6 +58,7 @@ python -m venv .venv-agentic-doc
 .\.venv-agentic-doc\Scripts\Activate.ps1
 pip install -e ".[dev]"
 python examples/run_esg_demo.py
+python examples/run_procurement_demo.py
 ```
 
 The default demo uses the deterministic fake provider and does not require an
@@ -68,6 +70,7 @@ Gemini support is optional and configured only through environment variables:
 
 ```powershell
 copy .env.example .env
+pip install -e ".[gemini]"
 # Edit .env with your own key, then:
 $env:DOC_EXTRACTOR_PROVIDER="gemini"
 $env:GOOGLE_API_KEY="your_api_key_here"
@@ -94,13 +97,28 @@ hardcoded in this repository.
 ## What The Demo Shows
 
 - dictionary-driven extraction
+- synthetic source discovery, URL ranking, and URL verification contracts
 - source-level evidence traceability
 - type, unit, evidence, and confidence validation with retry routing
 - human review queue for missing or uncertain fields
+- optional SQLite checkpoint snapshots
 - field-level evaluation against synthetic ground truth
 - pluggable provider interface for future LLM backends
 - clean agent role contracts for URL discovery, inside-out extraction,
   outside-in extraction, validation, and orchestration
+
+## Adapting The Framework
+
+To add a new extraction domain, create a folder under `domains/` with:
+
+- `dictionary.json` for field definitions, evidence rules, units, and validation hints
+- `job.json` for entity metadata, source documents, source references, and run options
+- `reports/` containing synthetic or public-safe source documents
+- `ground_truth/` when you want evaluation metrics
+
+The `procurement` demo shows the source pipeline. Candidate references are
+proposed by `url_extraction`, ranked by `url_ranking`, checked by
+`url_verification`, then routed to the extraction workflow.
 
 ## Prompt Design
 

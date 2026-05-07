@@ -13,11 +13,15 @@ class WorkflowState(TypedDict, total=False):
     job_path: str
     job_base_dir: str
     job: dict[str, Any]
+    source_candidates: list[dict[str, Any]]
+    ranked_sources: list[dict[str, Any]]
+    verified_sources: list[dict[str, Any]]
     documents: list[dict[str, Any]]
     evidence: list[dict[str, Any]]
     results: list[dict[str, Any]]
     extraction_attempts: int
     validation_summary: dict[str, Any]
     review_queue: list[dict[str, Any]]
+    last_completed_node: str
     aggregate: dict[str, Any]
     evaluation_summary: dict[str, Any]

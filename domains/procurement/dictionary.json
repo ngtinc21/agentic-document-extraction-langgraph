@@ -1,0 +1,74 @@
+{
+  "dictionary": [
+    {
+      "id": "supplier_name",
+      "label": "Supplier legal name",
+      "definition": "The legal name of the supplier or vendor.",
+      "expected_type": "string",
+      "evidence_rules": {
+        "keywords": ["Supplier legal name"]
+      }
+    },
+    {
+      "id": "contract_value",
+      "label": "Contract value",
+      "definition": "The total contract value disclosed in the supplier onboarding packet.",
+      "expected_type": "number",
+      "expected_unit": "USD",
+      "evidence_rules": {
+        "keywords": ["Contract value"]
+      },
+      "validation_rules": {
+        "min_value": 0,
+        "allowed_units": ["USD"]
+      }
+    },
+    {
+      "id": "insurance_coverage_amount",
+      "label": "Insurance coverage amount",
+      "definition": "The amount of general liability insurance coverage held by the supplier.",
+      "expected_type": "number",
+      "expected_unit": "USD",
+      "evidence_rules": {
+        "keywords": ["Insurance coverage amount"]
+      },
+      "validation_rules": {
+        "min_value": 0,
+        "allowed_units": ["USD"]
+      }
+    },
+    {
+      "id": "data_processing_agreement",
+      "label": "Data processing agreement",
+      "definition": "Whether the supplier maintains a signed data processing agreement.",
+      "expected_type": "boolean",
+      "evidence_rules": {
+        "keywords": ["Data processing agreement"]
+      }
+    },
+    {
+      "id": "security_certification",
+      "label": "Security certification",
+      "definition": "The supplier's disclosed information security certification.",
+      "expected_type": "string",
+      "evidence_rules": {
+        "keywords": ["Security certification"]
+      }
+    },
+    {
+      "id": "delivery_sla_days",
+      "label": "Delivery SLA days",
+      "definition": "The committed delivery service-level agreement measured in days.",
+      "expected_type": "number",
+      "expected_unit": "days",
+      "evidence_rules": {
+        "keywords": ["Delivery SLA days"]
+      },
+      "validation_rules": {
+        "min_value": 1,
+        "max_value": 30,
+        "allowed_units": ["days"]
+      }
+    }
+  ]
+}

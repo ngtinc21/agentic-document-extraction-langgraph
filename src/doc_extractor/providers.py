@@ -6,11 +6,15 @@ implement the same interface without changing the LangGraph workflow.
 
 from __future__ import annotations
 
+import json
 import os
 import re
 from abc import ABC, abstractmethod
 from collections.abc import Sequence
 
+from pydantic import ValidationError
+
+from .prompts import build_evidence_prompt, build_extraction_prompt
 from .schemas import DictionaryEntry, EvidenceRecord, ExtractionResult, SourceDocument
 
 
@@ -150,10 +154,19 @@ class GeminiProvider(BaseLLMProvider):
     def scout_evidence(
         self, entry: DictionaryEntry, documents: Sequence[SourceDocument]
     ) -> list[EvidenceRecord]:
-        # Keep the public MVP deterministic by using the fake search strategy for
-        # evidence selection. Provider-specific generation can be added behind
-        # this interface without changing workflow state or schemas.
-        return FakeLLMProvider().scout_evidence(entry, documents)
+        prompt = build_evidence_prompt(entry, documents)
+        response_text = self._generate_text(prompt)
+        payload = _parse_json_from_text(response_text)
+        if not isinstance(payload, list):
+            raise RuntimeError("Gemini evidence response must be a JSON list")
+
+        evidence: list[EvidenceRecord] = []
+        for item in payload:
+            try:
+                evidence.append(EvidenceRecord.model_validate(item))
+            except ValidationError as exc:
+                raise RuntimeError("Gemini evidence response did not match schema") from exc
+        return evidence
 
     def extract_value(
         self,
@@ -161,7 +174,39 @@ class GeminiProvider(BaseLLMProvider):
         evidence: Sequence[EvidenceRecord],
         previous_result: ExtractionResult | None = None,
     ) -> ExtractionResult:
-        return FakeLLMProvider().extract_value(entry, evidence, previous_result)
+        prompt = build_extraction_prompt(entry, evidence, previous_result)
+        response_text = self._generate_text(prompt)
+        payload = _parse_json_from_text(response_text)
+        if not isinstance(payload, dict):
+            raise RuntimeError("Gemini extraction response must be a JSON object")
+        try:
+            return ExtractionResult.model_validate(payload)
+        except ValidationError as exc:
+            raise RuntimeError("Gemini extraction response did not match schema") from exc
+
+    def _generate_text(self, prompt: str) -> str:
+        response = self._client.models.generate_content(
+            model=self._model,
+            contents=prompt,
+        )
+        text = getattr(response, "text", None)
+        if not text:
+            raise RuntimeError("Gemini response did not include text")
+        return text
+
+
+def _parse_json_from_text(text: str) -> object:
+    stripped = text.strip()
+    if stripped.startswith("```"):
+        stripped = re.sub(r"^```(?:json)?\s*", "", stripped)
+        stripped = re.sub(r"\s*```$", "", stripped)
+    try:
+        return json.loads(stripped)
+    except json.JSONDecodeError:
+        match = re.search(r"(\{.*\}|\[.*\])", stripped, flags=re.DOTALL)
+        if match:
+            return json.loads(match.group(1))
+        raise
 
 
 def build_provider(name: str) -> BaseLLMProvider:

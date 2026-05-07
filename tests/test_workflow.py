@@ -15,6 +15,17 @@ def test_esg_demo_workflow_runs_end_to_end():
     assert result["evaluation_summary"]["coverage"] == 1.0
 
 
+def test_procurement_demo_runs_with_source_pipeline_and_checkpoints():
+    result = run_workflow(PROJECT_ROOT / "domains" / "procurement" / "job.json")
+
+    assert result["job_id"] == "procurement-demo-northwind-2025"
+    assert len(result["results"]) == 6
+    assert result["validation_summary"]["review_count"] == 0
+    assert result["evaluation_summary"]["accuracy"] == 1.0
+    assert result["evaluation_summary"]["coverage"] == 1.0
+    assert len([item for item in result["verified_sources"] if item["status"] == "verified"]) == 3
+
+
 def test_validation_route_retries_until_budget_is_used():
     state = {
         "job": {
