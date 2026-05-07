@@ -131,8 +131,6 @@ domain-specific methodology.
 
 ## Portfolio Positioning
 
-Suggested wording:
-
 > Built a clean-room, dictionary-driven agentic document extraction framework
 > using LangGraph and Pydantic. The framework extracts structured fields from
 > documents using configurable field definitions, evidence rules, validation
